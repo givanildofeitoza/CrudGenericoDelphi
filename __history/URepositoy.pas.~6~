@@ -1,0 +1,65 @@
+unit URepositoy;
+
+interface
+
+uses  System.TypInfo,System.Generics.Collections,Data.SqlExpr, System.SysUtils, System.Rtti;
+
+implementation
+
+
+type TRepositorioGenerico<T> = class
+  Private
+     FQuery : TSQLQuery;
+     FTypeInfo : PTypeInfo;
+     FTableName : string;
+   public
+     procedure Update(pObjeto : T);
+     procedure Delete(pId : integer);
+     procedure Add(pObjeto : T);
+     function GetById(pId : integer): T;
+     function GetAll(): TObjectList<T>;
+
+     Constructor Create(pQuery : TSQLQuery);
+end;
+
+
+
+{ TRepositorioGenerico<T> }
+
+procedure TRepositorioGenerico<T>.Add(pObjeto: T);
+//var
+//  ctx : TRttiContext;
+ // prop: TRttiProperty;
+begin
+   // ctx  := TRttiContext.Create;
+    //prop := ctx.GetType(pObjeto).GetProperty('MyProperty');
+  FTypeInfo := TypeInfo(pObjeto);
+  FTableName := FTypeInfo.Name;
+end;
+
+constructor TRepositorioGenerico<T>.Create(pQuery: TSQLQuery);
+begin
+    FQuery := pQuery;
+end;
+
+procedure TRepositorioGenerico<T>.Delete(pId, integer);
+begin
+
+end;
+
+function TRepositorioGenerico<T>.GetAll: TObjectList<T>;
+begin
+
+end;
+
+function TRepositorioGenerico<T>.GetById(pId: integer): T;
+begin
+
+end;
+
+procedure TRepositorioGenerico<T>.Update(pObjeto: T);
+begin
+
+end;
+
+end.
