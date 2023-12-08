@@ -1,0 +1,96 @@
+unit URepositoy;
+
+interface
+
+uses  System.TypInfo,System.Generics.Collections,Data.SqlExpr, System.SysUtils, System.Rtti;
+
+implementation
+
+
+type
+
+TableGeneric<T>=class
+end;
+
+TRepositorioGenerico<T> = class
+  Private
+     FQuery : TSQLQuery;
+     FTypeInfo : PTypeInfo;
+     FTableName : string;
+   public
+     procedure Update(pObjeto : T);
+     procedure Delete(pId : integer);
+     procedure Add(pObjeto : T);
+     function GetById(pId : integer): T;
+     function GetAll(): TList<T>;
+
+     Constructor Create(pQuery : TSQLQuery);
+end;
+
+ TCliente = class
+  private
+    Fcodigo : integer;
+    FNome   : string;
+    FTelefone  : string;
+   public
+    property  Codigo    : integer  read  FCodigo    write  FCodigo;
+    property  Nome      : string   read  FNome      write  FNome;
+    property  Telefone  : string   read  FTelefone  write  FTelefone;
+end;
+
+TCustomer = class
+  private
+    FCodigo    : integer;
+    FDescricao : string;
+    FValor     : Currency;
+  public
+    property  Codigo    : integer  read  FCodigo    write  FCodigo;
+    property  Descricao : string   read  FDescricao write  FDescricao;
+    property  Valor     : Currency read  FValor     write  FValor;
+end;
+
+ TCustomerRepository = class(TRepositorioGenerico<TCliente>)
+end;
+
+
+{ TRepositorioGenerico<T> }
+procedure TRepositorioGenerico<T>.Add(pObjeto: T);
+var
+  ctx : TRttiContext;
+  prop: TRttiProperty;
+  tipo : TRttiType;
+begin
+  ctx  := TRttiContext.Create;
+  tipo := ctx.GetType(TableGeneric<T>);
+  //prop := ctx.GetType(pObjeto).GetProperty('MyProperty');
+  FTypeInfo  := tipo.Handle;
+  FTableName := FTypeInfo.Name;
+
+end;
+
+constructor TRepositorioGenerico<T>.Create(pQuery: TSQLQuery);
+begin
+    FQuery := pQuery;
+end;
+
+procedure TRepositorioGenerico<T>.Delete(pId: integer);
+begin
+
+end;
+
+function TRepositorioGenerico<T>.GetAll: TList<T>;
+begin
+
+end;
+
+function TRepositorioGenerico<T>.GetById(pId: integer): T;
+begin
+
+end;
+
+procedure TRepositorioGenerico<T>.Update(pObjeto: T);
+begin
+
+end;
+
+end.
