@@ -98,13 +98,15 @@ begin
    //ACTIONS'S  CRUD GENERIC PRODUCT
    ORM := TORM.Create(Connection);
    ORM.Add(Product);
-   ORM.SaveChange(Product);
+   ORM.Update(Product);
    ORM.Remove(Product);
 
    //ACTIONS'S  CRUD GENERIC CUSTOMER
    ORM.Add(Customer);
-   ORM.SaveChange(Customer);
+   ORM.Update(Customer);
    ORM.Remove(Customer);
+
+   ORM.SaveChange;
 end;
 
 end.

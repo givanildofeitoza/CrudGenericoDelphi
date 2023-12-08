@@ -27,9 +27,9 @@ TORM = class
    public
      procedure  Add(pObject : TObject);
      procedure  Remove(pObject: TObject);
-     procedure  SaveChange(pObject : TObject);
+     procedure  Update(pObject : TObject);
+     procedure  SaveChange();
      function GetPropertyValue(pProp : string; ArrayFields : TArray<TRttiField>; pObject: TObject) : string;
-
      constructor Create(PConexao : TSQLConnection);
 end;
 
@@ -60,6 +60,7 @@ constructor TORM.Create(PConexao: TSQLConnection);
 begin
    FQuery := TSQLQuery.Create(nil);
    FQuery.SQLConnection := PConexao;
+   FQuery.SQL.Clear;
    FCtx   := TRttiContext.Create;
 end;
 
@@ -74,18 +75,23 @@ begin
    FClassName  := Copy(TypeObject.Name,2,length(TypeObject.Name)-1);
    FPpropInfo  := GetPropInfo(pObject.ClassType,ArrayFields[0].Name);
 
-   FQuery.SQL.Clear();
    FQuery.SQL.Add('DELETE FROM '+FClassName);
 
    for I := 0 to length(ArrayFields)-1 do
    begin
       if ArrayFields[I].Name = 'key' then
-      FQuery.SQL.Add(' WHERE '+ArrayFields[I].GetValue(pObject).ToString+' = "'+GetPropertyValue(ArrayFields[I].GetValue(pObject).ToString,ArrayFields,pObject)+'"');
+      FQuery.SQL.Add(' WHERE '+ArrayFields[I].GetValue(pObject).ToString+
+      ' = "'+GetPropertyValue(ArrayFields[I].GetValue(pObject).ToString,ArrayFields,pObject)+'";');
    end;
-   FQuery.ExecSQL();
 end;
 
-procedure TORM.SaveChange(pObject: TObject);
+procedure TORM.SaveChange;
+begin
+    FQuery.ExecSQL();
+    FQuery.SQL.Clear;
+end;
+
+procedure TORM.Update(pObject: TObject);
 var
   ArrayFields : TArray<TRttiField>;
   I : Integer;
@@ -98,7 +104,6 @@ begin
     SqlValues   := string.empty;
     SqlFields   := string.empty;
 
-    FQuery.SQL.Clear();
     FQuery.SQL.Add(' UPDATE '+FClassName+' SET ');
     for I := 0 to length(ArrayFields)-1 do
     begin
@@ -143,9 +148,8 @@ begin
     for I := 0 to length(ArrayFields)-1 do
     begin
       if ArrayFields[I].Name = 'key' then
-      FQuery.SQL.Add(' WHERE '+ArrayFields[I].GetValue(pObject).ToString+' = "'+GetPropertyValue(ArrayFields[I].GetValue(pObject).ToString,ArrayFields,pObject)+'"');
+      FQuery.SQL.Add(' WHERE '+ArrayFields[I].GetValue(pObject).ToString+' = "'+GetPropertyValue(ArrayFields[I].GetValue(pObject).ToString,ArrayFields,pObject)+'";');
    end;
-   FQuery.ExecSQL();
 
 end;
 
@@ -213,10 +217,14 @@ begin
        end
        else
            SqlValues := SqlValues + ArrayFields[I].GetValue(pObject).ToString+','
-
    end;
-   FQuery.SQL.Add(copy(SqlValues,1,SqlValues.Length -1)+')');
-   FQuery.ExecSQL();
+   FQuery.SQL.Add(copy(SqlValues,1,SqlValues.Length -1)+');');
+   //comentário para commit
+
+
+
+
+
 end;
 
 end.
