@@ -4,7 +4,8 @@ uses
   Vcl.Forms,
   repositorio in 'repositorio.pas' {Form1},
   URepositoy in 'URepositoy.pas',
-  UORM in 'UORM.pas';
+  UORM in 'UORM.pas',
+  Models in 'Models.pas';
 
 {$R *.res}
 

@@ -22,6 +22,15 @@ object Form1: TForm1
     TabOrder = 0
     OnClick = BitBtn1Click
   end
+  object btn1: TBitBtn
+    Left = 336
+    Top = 272
+    Width = 75
+    Height = 25
+    Caption = 'btn1'
+    TabOrder = 1
+    OnClick = btn1Click
+  end
   object Connection: TSQLConnection
     DriverName = 'DevartMySQLDirect'
     LoginPrompt = False
@@ -43,10 +52,10 @@ object Form1: TForm1
       'UseUnicode=True'
       'IPVersion=IPv4'
       'BlobSize=-1'
-      'HostName=192.168.1.11:3307'
-      'DataBase=construcao'
+      'HostName=localhost:3307'
+      'DataBase=orm'
       'User_Name=root'
-      'Password=iq@2013tex')
+      'Password=p@ssw0rd')
     Connected = True
     Left = 16
     Top = 16

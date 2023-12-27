@@ -1,0 +1,80 @@
+unit Models;
+
+interface
+
+uses System.TypInfo;
+
+type
+
+{$SCOPEDENUMS ON}
+EnumModel =(TProduct,TCustomer);
+
+RecordModelEnum = record helper for EnumModel
+  public
+     function GetName : string;
+end;
+
+TModal = class
+   key : string;
+   AutoIncremment : boolean;
+end;
+
+
+ TCustomer = class(TModal)
+  private
+    Id   : integer;
+    Nome     : string;
+    Telefone : string;
+    Nascimento : TDate;
+    Ativo      : boolean;
+   public
+    property  PId         : integer  read  Id         write  Id;
+    property  PNome       : string   read  Nome       write  Nome;
+    property  PTelefone   : string   read  Telefone   write  Telefone;
+    property  PNascimento : TDate    read  Nascimento write Nascimento;
+    property  PAtivo      : boolean  read  Ativo      write Ativo;
+    constructor Create();
+end;
+
+type
+ TProduct = class(TModal)
+  private
+    codigo   : integer;
+    Descricao:  string;
+    Valor    : Currency;
+    Ativo    : boolean;
+   public
+    property  PCodigo    : integer  read  Codigo     write  Codigo;
+    property  PDescricao : string   read  Descricao  write  Descricao;
+    property  PValor: Currency      read  Valor      write Valor;
+    property  PAtivo: boolean       read  Ativo      write Ativo;
+
+    constructor Create();
+end;
+
+implementation
+
+{ TCustomer }
+
+constructor TCustomer.Create();
+begin
+    Key := 'Id';
+end;
+
+
+{ TProduct }
+
+constructor TProduct.Create();
+begin
+    Key := 'codigo';
+end;
+
+{ RecordModelEnum }
+
+function RecordModelEnum.GetName: string;
+begin
+  Result := GetEnumName(TypeInfo(EnumModel),Ord(Self));
+
+end;
+
+end.
